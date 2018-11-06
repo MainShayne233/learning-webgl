@@ -1,6 +1,7 @@
 module Main exposing (Model, Msg(..), Section, init, main, update, view)
 
 import Browser
+import GettingStartedWithWebGL
 import Html exposing (Html, a, div, h1, h2, img, li, p, text, ul)
 import Html.Attributes exposing (href, src, target)
 import Html.Events exposing (onClick)
@@ -11,7 +12,7 @@ import Html.Events exposing (onClick)
 
 
 type alias Section =
-    { name : String, file : String, tutorialUrl : String }
+    { name : String, tutorialUrl : String }
 
 
 type Page
@@ -25,7 +26,7 @@ type alias Model =
 
 sections : List Section
 sections =
-    [ Section "Getting started with WebGL" "getting_started_with_webgl" "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" ]
+    [ Section "Getting started with WebGL" "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" ]
 
 
 init : ( Model, Cmd Msg )
@@ -60,11 +61,24 @@ update msg model =
 ---- VIEW ----
 
 
-renderSection section =
+renderSectionHeader section =
     div []
         [ h1 [] [ text section.name ]
         , p [] [ a [ href section.tutorialUrl, target "_blank" ] [ text "From this tutorial" ] ]
         , p [] [ a [ href "#", onClick (SetPage Home) ] [ text "Go Back" ] ]
+        ]
+
+
+renderSection section =
+    let
+        sectionToRender =
+            case section.name of
+                _ ->
+                    GettingStartedWithWebGL.render
+    in
+    div []
+        [ renderSectionHeader section
+        , sectionToRender
         ]
 
 
