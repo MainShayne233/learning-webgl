@@ -2,7 +2,7 @@ module Main exposing (Model, Msg(..), Section, init, main, update, view)
 
 import Browser
 import Html exposing (Html, a, div, h1, h2, img, li, p, text, ul)
-import Html.Attributes exposing (href, src)
+import Html.Attributes exposing (href, src, target)
 import Html.Events exposing (onClick)
 
 
@@ -63,7 +63,7 @@ update msg model =
 renderSection section =
     div []
         [ h1 [] [ text section.name ]
-        , p [] [ a [ href section.tutorialUrl ] [ text "From this tutorial" ] ]
+        , p [] [ a [ href section.tutorialUrl, target "_blank" ] [ text "From this tutorial" ] ]
         , p [] [ a [ href "#", onClick (SetPage Home) ] [ text "Go Back" ] ]
         ]
 
