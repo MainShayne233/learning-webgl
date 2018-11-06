@@ -1,20 +1,40 @@
-module Main exposing (..)
+module Main exposing (Model, Msg(..), Section, init, main, update, view)
 
 import Browser
-import Html exposing (Html, text, div, h1, img)
-import Html.Attributes exposing (src)
+import Html exposing (Html, a, div, h1, h2, img, li, p, text, ul)
+import Html.Attributes exposing (href, src)
+import Html.Events exposing (onClick)
+
 
 
 ---- MODEL ----
 
 
+type alias Section =
+    { name : String, file : String, tutorialUrl : String }
+
+
+type Page
+    = SectionPage Section
+    | Home
+
+
 type alias Model =
-    {}
+    { sections : List Section, currentPage : Page }
+
+
+sections : List Section
+sections =
+    [ Section "Getting started with WebGL" "getting_started_with_webgl" "https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Tutorial/Getting_started_with_WebGL" ]
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( {}, Cmd.none )
+    ( { sections = sections
+      , currentPage = Home
+      }
+    , Cmd.none
+    )
 
 
 
@@ -23,23 +43,52 @@ init =
 
 type Msg
     = NoOp
+    | SetPage Page
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    ( model, Cmd.none )
+    case msg of
+        SetPage page ->
+            ( { model | currentPage = page }, Cmd.none )
+
+        NoOp ->
+            ( model, Cmd.none )
 
 
 
 ---- VIEW ----
 
 
-view : Model -> Html Msg
-view model =
+renderSection section =
+    div []
+        [ h1 [] [ text section.name ]
+        , p [] [ a [ href section.tutorialUrl ] [ text "From this tutorial" ] ]
+        , p [] [ a [ href "#", onClick (SetPage Home) ] [ text "Go Back" ] ]
+        ]
+
+
+renderSectionListItem section =
+    li []
+        [ a [ href "#", onClick (SetPage (SectionPage section)) ] [ text section.name ]
+        ]
+
+
+renderIndex all_sections =
     div []
         [ img [ src "/logo.svg" ] []
-        , h1 [] [ text "Your Elm App is working!" ]
+        , ul [] (List.map renderSectionListItem all_sections)
         ]
+
+
+view : Model -> Html Msg
+view model =
+    case model.currentPage of
+        Home ->
+            renderIndex model.sections
+
+        SectionPage section ->
+            renderSection section
 
 
 
