@@ -2,7 +2,7 @@ module Main exposing (Model, Msg(..), Section, init, main, update, view)
 
 import Browser
 import GettingStartedWithWebGL
-import Html exposing (Html, a, div, h1, h2, img, li, p, text, ul)
+import Html exposing (Html, a, div, h1, h2, li, p, text, ul)
 import Html.Attributes exposing (href, src, target)
 import Html.Events exposing (onClick)
 
@@ -90,8 +90,7 @@ renderSectionListItem section =
 
 renderIndex all_sections =
     div []
-        [ img [ src "/logo.svg" ] []
-        , ul [] (List.map renderSectionListItem all_sections)
+        [ ul [] (List.map renderSectionListItem all_sections)
         ]
 
 
